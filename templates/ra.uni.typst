@@ -1,0 +1,59 @@
+#set page(
+    paper: "a4",
+    flipped: true,
+)
+
+#let conf = toml("/conf.toml")
+#let risks = json("/build/data/uni.risks.json")
+
+= Record of a risk assessment
+    
+#table(
+    columns: (1fr, 9fr),
+    [*Task*],
+    conf.title
+)
+
+#table(
+    columns: (2fr, 5fr, 3fr, 2fr),
+    [*Department*], conf.department,
+    [*Assessment ID*], conf.id,
+    [*Assessor*], conf.assessor,
+    [*Date of Assessment*], datetime.today().display(),
+    [*Authorised by*], conf.authoriser,
+    [*Review date*], if conf.review != false {conf.review} else [One off event],
+)
+
+#table(
+    columns: (1fr,) * 4,
+    [
+        == Step 1
+        List significant hazards
+    ],
+    [
+        == Step 2
+        Who might be harmed
+    ],
+    [
+        == Step 3
+        Determine appropriate controls
+    ],
+    [
+        == Step 4
+        Make it happen
+    ],
+    ..risks.map(
+        risk => (
+            risk.hazard,
+            if risk.at("risk.all") [Everyone at the event]
+            else {
+                if risk.at("risk.attendees") [- Attendees]
+                if risk.at("risk.volunteers") [- Volunteers]
+                if risk.at("risk.staff") [- Staff]
+            },
+            [#risk.remove #risk.reduce],
+            [#risk.control],
+        )
+    ).flatten()
+)
+

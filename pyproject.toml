@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "risk-assessments"
+version = "0.1.0"
+description = ""
+authors = ["Jonathan Leeming <jonathan@leeming.dev>"]
+readme = "README.md"
+packages = [{include = "risk_assessments"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^2.2.0"
+openpyxl = "^3.1.2"
+pyarrow = "^15.0.0"
+typst = "^0.10.0"
+fastapi = "^0.109.2"
+uvicorn = "^0.27.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
